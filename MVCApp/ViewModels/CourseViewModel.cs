@@ -24,7 +24,7 @@ namespace MVCApp.ViewModels
 
         public virtual Teacher Teacher { get; set; }
 
-        public SelectList Teachers { get; set; }
+        public List<Teacher> Teachers { get; set; }
     
     }
 }

@@ -29,5 +29,7 @@ namespace MVCApp
         [Required]
         public string Mobile { get; set; }
 
+        public string FullName => this.FirstName +" "+ this.LastName;
+
     }
 }

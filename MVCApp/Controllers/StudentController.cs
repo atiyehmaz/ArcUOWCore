@@ -11,13 +11,14 @@ namespace MVCApp.Controllers
 {
     public class StudentController : Controller
     {
-        private RestClient client = new RestClient("http://localhost:9090/api/");
+        private readonly RestClient client = new RestClient("http://localhost:9090/api/");
 
         public IActionResult Index()
         {
-            RestRequest request = new RestRequest("Student/GetStudents", Method.GET);
-
-            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            RestRequest request = new RestRequest("Student/GetStudents", Method.GET)
+            {
+                OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; }
+            };
             IRestResponse<List<Student>> response = client.Execute<List<Student>>(request);
 
             var entity = JsonConvert.DeserializeObject<List<Student>>(response.Content);

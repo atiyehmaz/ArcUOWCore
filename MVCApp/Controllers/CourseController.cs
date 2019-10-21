@@ -6,18 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using MVCApp.Models;
 using Newtonsoft.Json;
+using MVCApp.ViewModels;
 
 namespace MVCApp.Controllers
 {
     public class CourseController : Controller
     {
-        private RestClient client = new RestClient("http://localhost:9090/api/");
+        private readonly RestClient client = new RestClient("http://localhost:9090/api/");
 
         public IActionResult Index()
         {
-            RestRequest request = new RestRequest("Course/GetCourses", Method.GET);
-
-            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            RestRequest request = new RestRequest("Course/GetCourses", Method.GET)
+            {
+                OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; }
+            };
             IRestResponse<List<Course>> response = client.Execute<List<Course>>(request);
 
             var entity = JsonConvert.DeserializeObject<List<Course>>(response.Content);
@@ -27,13 +29,18 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            RestRequest request = new RestRequest("Student/GetStudents", Method.GET);
+            RestRequest request = new RestRequest("Teacher/GetTeachers", Method.GET)
+            {
+                OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; }
+            };
+            IRestResponse<List<Teacher>> response = client.Execute<List<Teacher>>(request);
 
-            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
-            IRestResponse<List<Student>> response = client.Execute<List<Student>>(request);
-
-            var entity = JsonConvert.DeserializeObject<List<Student>>(response.Content);
-            return View();
+            var entity = JsonConvert.DeserializeObject<List<Teacher>>(response.Content);
+            CourseViewModel course = new CourseViewModel
+            {
+                Teachers = entity
+            };
+            return View(course);
         }
 
         [HttpPost]
