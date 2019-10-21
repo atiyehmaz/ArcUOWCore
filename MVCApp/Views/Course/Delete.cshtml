@@ -1,0 +1,41 @@
+﻿@model MVCApp.Course
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>حذف</h2>
+
+<h3>آیا از حذف درس اطمینان دارید؟</h3>
+<div>
+    <h4>درس</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TeacherId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TeacherId)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="submit" value="حذف" class="btn btn-default" />
+        <input type="hidden" asp-for="Id" class="form-control" />
+        <input type="hidden" asp-for="Name" class="form-control" />
+        <input type="hidden" asp-for="TeacherId" class="form-control" />|
+        <a asp-action="Index">برگشت به لیست</a>
+    </form>
+</div>

@@ -46,6 +46,8 @@ namespace WebApi
 
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ITeacherService, TeacherService>();
+
 
 
             services.AddCors(c =>

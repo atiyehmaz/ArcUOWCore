@@ -14,39 +14,38 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowOrigin")]
-    public class CourseController : ControllerBase
+    public class TeacherController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly ICourseService _courseService;
+        private readonly ITeacherService _teacherService;
 
-        public CourseController(IUnitOfWork unitOfWork, ICourseService courseService)
+        public TeacherController(IUnitOfWork unitOfWork, ITeacherService teacherService)
         {
             this._unitOfWork = unitOfWork;
-            this._courseService = courseService;
+            this._teacherService = teacherService;
         }
 
         [HttpGet]
         [HttpOptions]
-        [Route("GetCourses")]
-        public IActionResult GetCourses()
-
+        [Route("GetTeachers")]
+        public IActionResult GetTeachers()
         {
-            var list = _courseService.GetAll();
+            var list = _teacherService.GetAll();
             return Ok(list);
         }
 
         [HttpPost]
-        [Route("CreateCourse")]
+        [Route("CreateTeacher")]
         [EnableCors("AllowOrigin")]
-        public IActionResult CreateCourse([FromBody]Course course)
+        public IActionResult CreateTeacher([FromBody]Teacher teacher)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     _unitOfWork.CreateTransaction();
-                    _courseService.Insert(course);
+                    _teacherService.Insert(teacher);
                     _unitOfWork.Save();
                     _unitOfWork.Commit();
                     if (_unitOfWork.Successful == true)
@@ -68,25 +67,25 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [HttpOptions]
-        [Route("GetCourseById")]
-        public IActionResult GetCourseById(int id)
+        [Route("GetTeacherById")]
+        public IActionResult GetTeacherById(int id)
         {
-            var course = _courseService.GetById(id);
-            return Ok(course);
+            var teacher = _teacherService.GetById(id);
+            return Ok(teacher);
         }
 
 
         [HttpPost]
-        [Route("DeleteCourse")]
+        [Route("DeleteTeacher")]
         [EnableCors("AllowOrigin")]
-        public IActionResult DeleteCourse([FromBody]Course course)
+        public IActionResult DeleteTeacher([FromBody]Teacher teacher)
         {
-            if (course.Id != 0)
+            if (teacher.Id != 0)
             {
                 try
                 {
                     _unitOfWork.CreateTransaction();
-                    _courseService.Delete(course.Id);
+                    _teacherService.Delete(teacher.Id);
                     _unitOfWork.Save();
                     _unitOfWork.Commit();
                     if (_unitOfWork.Successful == true)
