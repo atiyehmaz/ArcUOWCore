@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Web.Http;
-using Domain;
 using Data.UnitOfWork;
 using Service;
 using Service.BaseService;
 using Microsoft.AspNetCore.Cors;
+using Domain;
 
 namespace WebApi.Controllers
 {
@@ -35,6 +35,15 @@ namespace WebApi.Controllers
         {
             var list = _studentService.GetAll();
             return Ok(list);
+        }
+
+        [HttpGet]
+        [HttpOptions]
+        [Route("GetStudentById")]
+        public IActionResult GetStudentById(int id)
+        {
+            var student = _studentService.GetById(id);
+            return Ok(student);
         }
 
         [HttpPost]
@@ -67,17 +76,17 @@ namespace WebApi.Controllers
             return BadRequest();
         }
 
-        [HttpGet]
-        [HttpOptions]
+        [HttpPost]
         [Route("DeleteStudent")]
-        public IActionResult DeleteStudent(int id)
+        [EnableCors("AllowOrigin")]
+        public IActionResult DeleteStudent([FromBody]Student student)
         {
-            if (id != 0)
+            if (student.Id != 0)
             {
                 try
                 {
                     _unitOfWork.CreateTransaction();
-                    _studentService.Delete(id);
+                    _studentService.Delete(student.Id);
                     _unitOfWork.Save();
                     _unitOfWork.Commit();
                     if (_unitOfWork.Successful == true)
